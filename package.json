@@ -1,22 +1,19 @@
 {
   "name": "icedevice",
-  "version": "1.0.0",
-  "description": "eHealth catchy description",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "0.9.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eHealthMeetup/icedevice.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/eHealthMeetup/icedevice/issues"
-  },
-  "homepage": "https://github.com/eHealthMeetup/icedevice#readme",
   "dependencies": {
-    "bootstrap": "^4.0.0-alpha.6"
+    "bootstrap": "^4.0.0-alpha.6",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }
