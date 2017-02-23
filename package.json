@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/eHealthMeetup/icedevice/issues"
   },
-  "homepage": "https://github.com/eHealthMeetup/icedevice#readme"
+  "homepage": "https://github.com/eHealthMeetup/icedevice#readme",
+  "dependencies": {
+    "bootstrap": "^4.0.0-alpha.6"
+  }
 }
