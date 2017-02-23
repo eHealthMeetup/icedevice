@@ -1,0 +1,19 @@
+{
+  "name": "icedevice",
+  "version": "1.0.0",
+  "description": "eHealth catchy description",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eHealthMeetup/icedevice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eHealthMeetup/icedevice/issues"
+  },
+  "homepage": "https://github.com/eHealthMeetup/icedevice#readme"
+}
