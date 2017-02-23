@@ -8,9 +8,9 @@ class App extends Component {
           <h2>Welcome to the eHealth mobile technologies meetup</h2>
           <h2>Select your role</h2>
           <ul>
-              <li><button class="btn btn-md">I'm a sensor</button></li>
-              <li><button class="btn btn-md">I'm a eHealth app enegineer</button></li>
-              <li><button class="btn btn-md">I'm a healthcare proffessional</button></li>
+              <li><button className="btn btn-md">Im a sensor</button></li>
+              <li><button className="btn btn-md">Im a eHealth app enegineer</button></li>
+              <li><button className="btn btn-md">Im a healthcare proffessional</button></li>
           </ul>
       </div>
     );
