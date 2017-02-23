@@ -2,12 +2,14 @@
   "name": "icedevice",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://ehealth.encapsia.com/meetup",
   "devDependencies": {
     "react-scripts": "0.9.0"
   },
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
     "react": "^15.4.2",
+    "react-ace": "^4.1.6",
     "react-dom": "^15.4.2"
   },
   "scripts": {
@@ -15,5 +17,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "https://ehealth.encapsia.com"
 }
