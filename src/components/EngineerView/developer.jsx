@@ -21,12 +21,19 @@ function getChart() {
     return document.querySelector('#results canvas');
 }
 
-function executeCode(the_code) {
+function _executeCode(_the_code, data) {
+    let pulse = data.pulse;
+    let pressure = data.pressure;
+    let galvanic = data.galvanic;
+    return eval(_the_code);
+}
+
+function executeCode(the_code, data) {
     try {
-        // let token = 'secret';
         let results = document.querySelector('#results');
         results.innerHTML = '<div class="returnValue"></div>';
-        let status = {message:'No errors.', output: eval(the_code)};
+
+        let status = {message:'No errors.', output: _executeCode(the_code, data)};
         if (document.querySelectorAll('#results .returnValue').length == 1) {
             results.innerText = status.output === undefined ? '' : status.output;
         }
@@ -42,14 +49,19 @@ export default class Developer extends Component {
         this.onEdit = this.onEdit.bind(this);
         this.state = {
             codeVal: '// Type your Javascript/ES6 code in here\n' +
-                     '"Your output here";\n',
+                     '["Your", "output", "here!"].join(" ");\n',
             resultsLog: 'No errors.',
-            resultOutput: ''
+            resultOutput: '',
+            data: {
+                pulse: [],
+                pressure: [],
+                galvanic: []
+            }
         };
     }
 
     onEdit(newValue) {
-        let result = executeCode(newValue);
+        let result = executeCode(newValue, this.state.data);
         this.setState({
             codeVal: newValue,
             resultsLog: result.message,
