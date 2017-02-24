@@ -33,3 +33,27 @@ div#results {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+body {
+    background: url('../../assets/signals.png') no-repeat;
+    background-color: #00b176;
+    background-size: cover;
+    background-position: top center;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 15px solid black;
+
+}
+.logo {
+    background: url('../../assets/eHealth-logo.png') no-repeat;
+    width: 300px;
+    height: 100px;
+    margin: 15px auto 0;
+}
+.app-container {
+    width: 100%;
+}
