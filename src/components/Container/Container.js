@@ -4,7 +4,7 @@ import Header from '../Header/Header';
 const Container = (props) => (
     <div>
         <Header />
-        {props.children};
+        {props.children}
     </div>
 );
 
