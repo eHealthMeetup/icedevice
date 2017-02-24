@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Button } from 'react-bootstrap';
+import Developer from './developer'
+
 const wellStyles = {maxWidth: 400, margin: '0 auto 10px'};
 class App extends Component {
-
-
   render() {
     return (
       <div className="App">
@@ -15,6 +15,7 @@ class App extends Component {
               <Button bsStyle="success" block>Im a eHealth app enegineer</Button>
               <Button bsStyle="success" block>Im a healthcare proffessional</Button>
           </ul>
+          <Developer />
       </div>
     );
   }
