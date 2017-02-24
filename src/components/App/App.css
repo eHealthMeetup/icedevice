@@ -1,3 +1,5 @@
+@import '../../../node_modules/npm-font-open-sans/open-sans.css';
+
 .App {
   text-align: center;
 }
@@ -22,6 +24,7 @@ body {
     min-height: 100vh;
     padding: 20px;
     border: 15px solid black;
+    font-family: "Open Sans", Arial, sans-serif;
 
 }
 .logo {
@@ -65,6 +68,9 @@ body {
 and (min-device-width: 320px)
 and (max-device-width: 768px)
 and (-webkit-min-device-pixel-ratio: 2) {
+    body {
+        border: none;
+    }
     .center-block {
         width: 300px;
     }
