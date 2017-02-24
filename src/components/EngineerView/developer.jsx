@@ -28,11 +28,12 @@ function _executeCode(_the_code, data) {
     return eval(_the_code);
 }
 
-function executeCode(the_code, data) {
+function executeCode(the_code, data, refresh) {
     try {
         let results = document.querySelector('#results');
         results.innerHTML = '<div class="returnValue"></div>';
 
+        Chart.defaults.global.animation.duration = refresh ? 0 : 500;
         let status = {message:'No errors.', output: _executeCode(the_code, data)};
         if (document.querySelectorAll('#results .returnValue').length == 1) {
             results.innerText = status.output === undefined ? '' : status.output;
@@ -47,6 +48,8 @@ export default class Developer extends Component {
     constructor(props) {
         super(props);
         this.onEdit = this.onEdit.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
+        this.scheduleRefresh = this.scheduleRefresh.bind(this);
         this.state = {
             codeVal: '// Type your Javascript/ES6 code in here\n' +
                      '["Your", "output", "here!"].join(" ");\n',
@@ -58,10 +61,42 @@ export default class Developer extends Component {
                 galvanic: []
             }
         };
+        this.scheduleRefresh();
+    }
+
+    onRefresh() {
+        let n1 = Math.floor((Math.random() * 10) + 1);
+        let n2 = Math.floor((Math.random() * 10) + 1);
+        let n3 = Math.floor((Math.random() * 10) + 1);
+        let pulse = this.state.data.pulse;
+        pulse.push(n1);
+        if (pulse.length > 10)
+            pulse.shift();
+        
+        this.setState({
+            data: {
+                pulse: pulse,
+                pressure: this.state.data.pressure,
+                galvanic: this.state.data.galvanic
+            }
+        });
+        let result = executeCode(this.state.codeVal, this.state.data, true);
+        this.setState({
+            resultsLog: result.message,
+            resultOutput: result.output
+        });
+        this.scheduleRefresh();
+    }
+
+    scheduleRefresh() {
+        let self = this;
+        setTimeout(function() {
+            self.onRefresh();
+        }, 1000);
     }
 
     onEdit(newValue) {
-        let result = executeCode(newValue, this.state.data);
+        let result = executeCode(newValue, this.state.data, false);
         this.setState({
             codeVal: newValue,
             resultsLog: result.message,
