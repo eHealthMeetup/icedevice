@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
 import brace from 'brace';
 import AceEditor from 'react-ace';
+import Chart from 'chart.js';
 import { Button, ButtonToolbar, Col, Grid, Panel, Row } from 'react-bootstrap';
 
 import 'brace/mode/javascript';
 import 'brace/theme/github';
 
+function getHtmlOutput() {
+    let results = document.querySelector('#results');
+    results.innerHTML = '<div class="output"></div>';
+    return document.querySelector('#results .output');
+}
+
+function getChart() {
+    let results = document.querySelector('#results');
+    results.innerHTML = '<canvas id="outputChart" width="400" height="300"></canvas>';
+    return document.querySelector('#results canvas');
+}
+
 function executeCode(the_code) {
     try {
-        var output = document.getElementById('results');
+        // let token = 'secret';
         eval(the_code);
     } catch(e) {
         return e.message;
@@ -21,7 +34,21 @@ export default class Developer extends Component {
         super(props);
         this.onEdit = this.onEdit.bind(this);
         this.state = {
-            codeVal: '// Type your Javascript code in here\noutput.innerText = "Your output here";\n',
+            codeVal: '// Type your Javascript/ES6 code in here\n' +
+                     '/*\n' +
+                     'let chart = new Chart(getChart(), {\n' +
+                     '    type: "bar", \n' +
+                     '    data: {\n' +
+                     '        datasets: [{\n' +
+                     '            label: "Pulse",\n' +
+                     '            data: [1, 2, 3]\n' +
+                     '        }],\n' +
+                     '        labels: ["Red", "Blue", "Green"]\n' +
+                     '    }\n' +
+                     '});\n' +
+                     '*/\n' +
+                     'let output = getHtmlOutput();\n' +
+                     'output.innerText = "Your output here";\n',
             resultsLog: 'No errors.'
         };
     }
