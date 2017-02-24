@@ -6,6 +6,8 @@ import { Button, ButtonToolbar, Col, Grid, Panel, Row } from 'react-bootstrap';
 
 import 'brace/mode/javascript';
 import 'brace/theme/github';
+import 'brace/theme/xcode';
+import 'brace/theme/twilight';
 
 function getHtmlOutput() {
     let results = document.querySelector('#results');
@@ -22,11 +24,16 @@ function getChart() {
 function executeCode(the_code) {
     try {
         // let token = 'secret';
-        eval(the_code);
+        let results = document.querySelector('#results');
+        results.innerHTML = '<div class="returnValue"></div>';
+        let status = {message:'No errors.', output: eval(the_code)};
+        if (document.querySelectorAll('#results .returnValue').length == 1) {
+            results.innerText = status.output === undefined ? '' : status.output;
+        }
+        return status;
     } catch(e) {
-        return e.message;
+        return {message: e.message, output: ''};
     }
-    return 'No errors.';
 }
 
 export default class Developer extends Component {
@@ -35,33 +42,24 @@ export default class Developer extends Component {
         this.onEdit = this.onEdit.bind(this);
         this.state = {
             codeVal: '// Type your Javascript/ES6 code in here\n' +
-                     '/*\n' +
-                     'let chart = new Chart(getChart(), {\n' +
-                     '    type: "bar", \n' +
-                     '    data: {\n' +
-                     '        datasets: [{\n' +
-                     '            label: "Pulse",\n' +
-                     '            data: [1, 2, 3]\n' +
-                     '        }],\n' +
-                     '        labels: ["Red", "Blue", "Green"]\n' +
-                     '    }\n' +
-                     '});\n' +
-                     '*/\n' +
-                     'let output = getHtmlOutput();\n' +
-                     'output.innerText = "Your output here";\n',
-            resultsLog: 'No errors.'
+                     '"Your output here";\n',
+            resultsLog: 'No errors.',
+            resultOutput: ''
         };
     }
 
     onEdit(newValue) {
+        let result = executeCode(newValue);
         this.setState({
             codeVal: newValue,
-            resultsLog: executeCode(newValue)
+            resultsLog: result.message,
+            resultOutput: result.output
         });
     }
 
     render() {
         let panelStyle = this.state.resultsLog == 'No errors.' ? 'primary' : 'danger';
+        
         return (
             <div className="developer">
               <Grid>
@@ -82,9 +80,8 @@ export default class Developer extends Component {
                         value={this.state.codeVal}
                         height="20em"
                         width="100%"
+                        enableBasicAutocompletion={true}
                         setOptions={{
-                                enableBasicAutocompletion: true,
-                                enableLiveAutocompletion: true,
                                 tabSize: 4,
                                 fontSize: 14,
                                 showGutter: true
@@ -96,6 +93,69 @@ export default class Developer extends Component {
                       <div id="results">Your output here</div>
                     </Panel>
                     <Button bsStyle="success" bsSize="large">Publish</Button>
+                  </Col>
+                </Row>
+                
+                <Row className="show-grid">
+                  <Col sm={12} md={12}>
+                    <h3>Check out these samples</h3>
+                  </Col>
+                </Row>
+                <Row className="show-grid">
+                  <Col sm={6} md={6}>
+                    <AceEditor
+                        mode="javascript"
+                        theme="xcode"
+                        name="sample1"
+                        highlightActiveLine={false}
+                        readOnly={true}
+                        editorProps={{$blockScrolling: true}}
+                        value={
+                            '// Draw a barchart\n' +
+                               'let chart = new Chart(getChart(), {\n' +
+                               '    type: "bar", \n' +
+                               '    data: {\n' +
+                               '        datasets: [{\n' +
+                               '            label: "Pulse",\n' +
+                               '            data: [1, 2, 3]\n' +
+                               '        }],\n' +
+                               '        labels: ["Red", "Blue", "Green"]\n' +
+                               '    }\n' +
+                               '});\n' +
+                               '\n\n// Output some formatted html\n' +
+                               'let output = getHtmlOutput();\n' +
+                               'output.innerHTML = "Your <b>output</b> here";\n'
+                              }
+                        height="20em"
+                        width="100%"
+                        setOptions={{showGutter: false}}
+                    />
+                  </Col>
+                  <Col sm={6} md={6}>
+                    <AceEditor
+                        mode="javascript"
+                        theme="xcode"
+                        name="sample1"
+                        highlightActiveLine={false}
+                        readOnly={true}
+                        editorProps={{$blockScrolling: true}}
+                        value={
+                            '// Draw a line chart\n' +
+                               'let chart = new Chart(getChart(), {\n' +
+                               '    type: "line", \n' +
+                               '    data: {\n' +
+                               '        datasets: [{\n' +
+                               '            label: "Pulse",\n' +
+                               '            data: [1, 3, 2]\n' +
+                               '        }],\n' +
+                               '        labels: ["Red", "Blue", "Green"]\n' +
+                               '    }\n' +
+                               '});\n'
+                              }
+                        height="20em"
+                        width="100%"
+                        setOptions={{showGutter: false}}
+                    />
                   </Col>
                 </Row>
               </Grid>
