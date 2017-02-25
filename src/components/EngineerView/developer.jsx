@@ -55,6 +55,7 @@ export default class Developer extends Component {
                      '["Your", "output", "here!"].join(" ");\n',
             resultsLog: 'No errors.',
             resultOutput: '',
+            timer: false,
             data: {
                 pulse: [],
                 pressure: [],
@@ -62,6 +63,10 @@ export default class Developer extends Component {
             }
         };
         this.scheduleRefresh();
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.state.timer);
     }
 
     onRefresh() {
@@ -83,14 +88,14 @@ export default class Developer extends Component {
         let result = executeCode(this.state.codeVal, this.state.data, true);
         this.setState({
             resultsLog: result.message,
-            resultOutput: result.output
+            resultOutput: result.output,
+            timer: this.scheduleRefresh()
         });
-        this.scheduleRefresh();
     }
 
     scheduleRefresh() {
         let self = this;
-        setTimeout(function() {
+        return setTimeout(function() {
             self.onRefresh();
         }, 1000);
     }
