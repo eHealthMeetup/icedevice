@@ -7,20 +7,35 @@ import { Button, ButtonToolbar, Col, Grid, Panel, Row } from 'react-bootstrap';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
 import 'brace/theme/xcode';
-import 'brace/theme/twilight';
 
+import IceApi from '../../backend/ice';
+
+/*
+ * Inserts a div element in to the results. This is designed for direct manipulation 
+ * of HTML content.
+ * @insights_api
+ */
 function getHtmlOutput() {
     let results = document.querySelector('#results');
     results.innerHTML = '<div class="output"></div>';
     return document.querySelector('#results .output');
 }
 
+/*
+ * Inserts a canvas element as required by the chart.js library which is used to draw
+ * the nice graphics.
+ * @insights_api
+ */
 function getChart() {
     let results = document.querySelector('#results');
     results.innerHTML = '<canvas id="outputChart" width="400" height="300"></canvas>';
     return document.querySelector('#results canvas');
 }
 
+/*
+ * Helper function designed to provide a clean local scope against which the insights code 
+ * can be evaluated.
+ */
 function _executeCode(_the_code, data) {
     let pulse = data.pulse;
     let pressure = data.pressure;
@@ -28,6 +43,9 @@ function _executeCode(_the_code, data) {
     return eval(_the_code);
 }
 
+/*
+ * Execute the insight code and show its output (or error message) to the user.
+ */
 function executeCode(the_code, data, refresh) {
     try {
         let results = document.querySelector('#results');
