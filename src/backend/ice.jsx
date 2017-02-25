@@ -6,7 +6,7 @@ import privateConfig from './secrets'; // Ask Mihai for a sample or provide your
  */
 export default class IceApi {
     
-    constructor(location_search) {
+    constructor() {
         this._token = privateConfig().token;
     }
 
@@ -18,9 +18,9 @@ export default class IceApi {
         };
     }
     
-    _request(url, request_args) {
+    _request(url, requestArgs) {
         return new Promise((resolve, reject) => {
-            fetch(url, request_args).then(response => {
+            fetch(url, requestArgs).then(response => {
                 if (!response.ok) {
                     reject(response.statusText);
                 } else {

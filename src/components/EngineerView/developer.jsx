@@ -46,12 +46,12 @@ function _executeCode(_the_code, data) {
 /*
  * Execute the insight code and show its output (or error message) to the user.
  */
-function executeCode(the_code, data, refresh) {
+function executeCode(the_code, data, animation) {
     try {
         let results = document.querySelector('#results');
         results.innerHTML = '<div class="returnValue"></div>';
 
-        Chart.defaults.global.animation.duration = refresh ? 0 : 500;
+        Chart.defaults.global.animation.duration = animation ? 500 : 0;
         let status = {message:'No errors.', output: _executeCode(the_code, data)};
         if (document.querySelectorAll('#results .returnValue').length == 1) {
             results.innerText = status.output === undefined ? '' : status.output;
@@ -80,7 +80,7 @@ export default class Developer extends Component {
                 galvanic: []
             }
         };
-        this.scheduleRefresh();
+        this.scheduleRefresh(true);
     }
 
     componentWillUnmount() {
@@ -103,28 +103,25 @@ export default class Developer extends Component {
                 galvanic: this.state.data.galvanic
             }
         });
-        let result = executeCode(this.state.codeVal, this.state.data, true);
+        this.scheduleRefresh(false);
+    }
+
+    scheduleRefresh(animation) {
+        let self = this;
+        let result = executeCode(this.state.codeVal, this.state.data, animation);
+        clearTimeout(this.state.timer);
         this.setState({
             resultsLog: result.message,
             resultOutput: result.output,
-            timer: this.scheduleRefresh()
+            timer: setTimeout(function() {
+                self.onRefresh();
+            }, 1000)
         });
-    }
-
-    scheduleRefresh() {
-        let self = this;
-        return setTimeout(function() {
-            self.onRefresh();
-        }, 1000);
     }
 
     onEdit(newValue) {
-        let result = executeCode(newValue, this.state.data, false);
-        this.setState({
-            codeVal: newValue,
-            resultsLog: result.message,
-            resultOutput: result.output
-        });
+        this.setState({codeVal: newValue});
+        this.scheduleRefresh(true);
     }
 
     render() {
