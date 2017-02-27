@@ -8,7 +8,7 @@ import './SensorView.css';
 
 const SensorView = (props)  => (
     <div>
-      <h2>This is Sensor View component</h2>
+      <h4>Use the sensor below to create data:</h4>
       <RandomSensor />
     </div>
 );
@@ -108,7 +108,8 @@ export class RandomSensor extends Component {
                     label
                     vertical verticalSliderHeight="200px"
                     disableThumb
-                    sliderSize={90}
+                    trackColor="#EF4135"
+                    sliderSize={100}
                     min={0} max={200} step={10}
                     value={this.state.value}
                     onChange={this.onChange}
@@ -123,7 +124,7 @@ export class RandomSensor extends Component {
             <Row className="show-grid">
               <Col md={6} mdOffset={3} className="sensor">
                 <p>PULSE - Heartbeat</p>
-                <Button bsStyle="warning" bsSize="large" block onClick={() => this.onChange({value:'Pulse'})}>
+                <Button bsStyle="danger" bsSize="large" block onClick={() => this.onChange({value:'Pulse'})}>
                   Pulse!
                 </Button>
               </Col>
@@ -142,7 +143,7 @@ export class RandomSensor extends Component {
                         onClick={() => this.onChange({value:'goose'})}>
                   Goose
                 </Button>
-                <Button bsStyle="success" bsSize="large" block
+                <Button bsStyle="primary" bsSize="large" block
                         disabled={this.state.duck == 'unk'}
                         onClick={() => this.onChange({value:'duck'})}>
                   Duck
