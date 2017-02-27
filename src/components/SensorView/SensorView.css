@@ -1,10 +1,11 @@
 
 .sensor p {
   font-weight: bold;
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 
 .sensor {
-  padding: 10px;
-  background-color: #E0E0E0;
+  margin-top: 20px;
+  background: white;
+  padding: 30px;
 }
