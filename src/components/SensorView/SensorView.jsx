@@ -53,12 +53,13 @@ export class RandomSensor extends Component {
     
     onChange(state) {
         if (this.state.variable == 'DG') {
-            let responseTime = new Date().getTime() - this.state.duckTimer;
+            let now = new Date().getTime();
+            let responseTime = now - this.state.duckTimer;
             let responseCorrect = state.value == this.state.duck ? 2 : 1;
-            this.state.backend.postValue('DGCORRECT', responseCorrect);
-            this.state.backend.postValue('DGTIME', responseTime);
+            this.state.backend.postValue('DGCORRECT', responseCorrect, now);
+            this.state.backend.postValue('DGTIME', responseTime, now);
         } else {
-            this.state.backend.postValue(this.state.variable, state.value);
+            this.state.backend.postValue(this.state.variable, state.value, '');
         }
         this.setState({
             value: state.value,
@@ -89,7 +90,7 @@ export class RandomSensor extends Component {
                     horizontal
                     sliderSize={4}
                     thumbSize={24}
-                    min={0} max={100} step={10}
+                    min={0} max={100} step={1}
                     value={this.state.value}
                     onChange={this.onChange}
                 />
@@ -102,7 +103,7 @@ export class RandomSensor extends Component {
         return (
             <Row className="show-grid">
               <Col md={6} mdOffset={3} className="sensor">
-                <p>Blood Pressure (0-200)</p>
+                <p>BP - Blood Pressure (0-200)</p>
                 <ReactSimpleRange
                     label
                     vertical verticalSliderHeight="200px"
@@ -121,7 +122,7 @@ export class RandomSensor extends Component {
         return (
             <Row className="show-grid">
               <Col md={6} mdOffset={3} className="sensor">
-                <p>Heartbeat</p>
+                <p>PULSE - Heartbeat</p>
                 <Button bsStyle="warning" bsSize="large" block onClick={() => this.onChange({value:'Pulse'})}>
                   Pulse!
                 </Button>
@@ -134,7 +135,7 @@ export class RandomSensor extends Component {
         return (
             <Row className="show-grid">
               <Col md={6} mdOffset={3} className="sensor">
-                <p>Duck or Goose?</p>
+                <p>DG - Duck or Goose?</p>
                 <img src={this.state.duck + '.png'} />
                 <Button bsStyle="warning" bsSize="large" block
                         disabled={this.state.duck == 'unk'}

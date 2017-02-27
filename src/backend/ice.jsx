@@ -71,10 +71,10 @@ export default class IceApi {
         }]);
     }
 
-    postValue(variable, value) {
+    postValue(variable, value, repeat) {
         this._post('/v1/values', [{
             'subject': this._subject,
-            'group': '', 'subgroup': '', 'repeat': '',
+            'group': '', 'subgroup': '', 'repeat': `${repeat}`,
             'variable': variable,
             'value': `${value}`
         }]);
@@ -92,5 +92,9 @@ export default class IceApi {
                 'blob': `${response.result.url.split('/').pop()}`
             }]);
         });
+    }
+
+    getSensors() {
+        return this._get('/v1/views/entry/sensors');
     }
 }

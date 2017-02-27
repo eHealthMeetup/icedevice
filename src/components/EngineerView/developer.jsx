@@ -37,9 +37,20 @@ function getChart() {
  * can be evaluated.
  */
 function _executeCode(_the_code, data) {
-    let pulse = data.pulse;
-    let pressure = data.pressure;
-    let galvanic = data.galvanic;
+    let bpTimes = data.bpTimes;
+    let bpTimestamps = data.bpTimestamps;
+    let bpValues = data.bpValues;
+
+    let edaTimes = data.edaTimes;
+    let edaTimestamps = data.edaTimestamps;
+    let edaValues = data.edaValues;
+
+    ;
+    let dgTimestamps = data.dgTimestamps;
+    let dgRespTimes = data.dgRespTimes;
+    let dgRespCorrect = data.dgRespCorrect;
+
+    let pulseTimestamps = data.pressure;
     return eval(_the_code);
 }
 
@@ -71,15 +82,30 @@ export default class Developer extends Component {
         this.scheduleRefresh = this.scheduleRefresh.bind(this);
         this.state = {
             backend: new IceApi(),
-            codeVal: '// Type your Javascript/ES6 code in here\n' +
+            codeVal: '// Usable variables for each sensor\n' +
+                     '// BP: bpTimestamps, bpTimes, bpValues\n' +
+                     '// EDA: edaTimestamps, edaTimes, edaValues\n' +
+                     '// DG: dgTimestamps, dgRespCorrect, dgRespTimes\n' +
+                     '// PULSE: pulseTimestamps\n\n' +
+                     '// Type your Javascript/ES6 code in here\n' +
                      '["Your", "output", "here!"].join(" ");\n',
             resultsLog: 'No errors.',
             resultOutput: '',
             timer: false,
             data: {
-                pulse: [],
-                pressure: [],
-                galvanic: []
+                bpTimes: [],
+                bpTimestamps: [],
+                bpValues: [],
+
+                edaTimes: [],
+                edaTimestamps: [],
+                edaValues: [],
+                
+                dgTimestamps: [],
+                dgRespTimes: [],
+                dgRespCorrect: [],
+                
+                pulseTimestamps: []
             }
         };
         this.scheduleRefresh(true);
@@ -90,31 +116,27 @@ export default class Developer extends Component {
     }
 
     onRefresh() {
-        let n1 = Math.floor((Math.random() * 10) + 1);
-        let n2 = Math.floor((Math.random() * 10) + 1);
-        let n3 = Math.floor((Math.random() * 10) + 1);
-        let pulse = this.state.data.pulse;
-        pulse.push(n1);
-        if (pulse.length > 10)
-            pulse.shift();
-        
-        this.setState({
-            data: {
-                pulse: pulse,
-                pressure: this.state.data.pressure,
-                galvanic: this.state.data.galvanic
-            }
-        });
-        this.state.backend._get('/v1/values').then((jsonResponse) => {
+        this.state.backend.getSensors().then((json) => {
+            let d = json[0].data;
             this.setState({
                 data: {
-                    pulse: this.state.data.pulse,
-                    pressure: jsonResponse.result.values,
-                    galvanic: this.state.data.galvanic
+                    bpTimes: d.bp.times,
+                    bpTimestamps: d.bp.timestamps,
+                    bpValues: d.bp.values,
+
+                    edaTimes: d.eda.times,
+                    edaTimestamps: d.eda.timestamps,
+                    edaValues: d.eda.values,
+                    
+                    dgTimestamps: d.duckgoose.timestamps,
+                    dgRespTimes: d.duckgoose.response_times,
+                    dgRespCorrect: d.duckgoose.response_correct,
+                    
+                    pulseTimestamps: d.pulse
                 }
             });
+            this.scheduleRefresh(false);
         });
-        this.scheduleRefresh(false);
     }
 
     scheduleRefresh(animation) {
@@ -197,7 +219,7 @@ export default class Developer extends Component {
                         readOnly={true}
                         editorProps={{$blockScrolling: true}}
                         value={
-                            '// Draw a barchart\n' +
+                            '// Example 1 - Draw a barchart\n' +
                                'let chart = new Chart(getChart(), {\n' +
                                '    type: "bar", \n' +
                                '    data: {\n' +
@@ -208,7 +230,7 @@ export default class Developer extends Component {
                                '        labels: ["Red", "Blue", "Green"]\n' +
                                '    }\n' +
                                '});\n' +
-                               '\n\n// Output some formatted html\n' +
+                               '\n\n// Example 2 - Output some formatted html\n' +
                                'let output = getHtmlOutput();\n' +
                                'output.innerHTML = "Your <b>output</b> here";\n'
                               }
@@ -226,7 +248,7 @@ export default class Developer extends Component {
                         readOnly={true}
                         editorProps={{$blockScrolling: true}}
                         value={
-                            '// Draw a line chart\n' +
+                            '// Example 3 - Draw a line chart\n' +
                                'let chart = new Chart(getChart(), {\n' +
                                '    type: "line", \n' +
                                '    data: {\n' +
