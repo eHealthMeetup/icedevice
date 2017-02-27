@@ -69,6 +69,7 @@ export default class Developer extends Component {
         this.onRefresh = this.onRefresh.bind(this);
         this.scheduleRefresh = this.scheduleRefresh.bind(this);
         this.state = {
+            backend: new IceApi(),
             codeVal: '// Type your Javascript/ES6 code in here\n' +
                      '["Your", "output", "here!"].join(" ");\n',
             resultsLog: 'No errors.',
@@ -102,6 +103,15 @@ export default class Developer extends Component {
                 pressure: this.state.data.pressure,
                 galvanic: this.state.data.galvanic
             }
+        });
+        this.state.backend._get('/v1/values').then((jsonResponse) => {
+            this.setState({
+                data: {
+                    pulse: this.state.data.pulse,
+                    pressure: jsonResponse.result.values,
+                    galvanic: this.state.data.galvanic
+                }
+            });
         });
         this.scheduleRefresh(false);
     }

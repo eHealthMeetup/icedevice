@@ -7,7 +7,10 @@ import privateConfig from './secrets'; // Ask Mihai for a sample or provide your
 export default class IceApi {
     
     constructor() {
-        this._token = privateConfig().token;
+        let config = privateConfig()
+        this._token = config.token;
+        this._site = config.site;
+        this._subject = config.subject;
     }
 
     _getHeaders() {
@@ -51,5 +54,29 @@ export default class IceApi {
             headers: this._getHeaders(),
             body: JSON.stringify(body)
         });
+    }
+
+    postSite(name, country) {
+        this._post('/v1/sites', [{
+            'id': null,
+            'name': name,
+            'country': country
+        }]);
+    }
+    
+    postSubject(subject, site) {
+        this._post('/v1/subjects', [{
+            'id': subject,
+            'site': site
+        }]);
+    }
+
+    postValue(variable, value) {
+        this._post('/v1/values', [{
+            'subject': this._subject,
+            'group': '', 'subgroup': '', 'repeat': '',
+            'variable': variable,
+            'value': value.toString()
+        }]);
     }
 }

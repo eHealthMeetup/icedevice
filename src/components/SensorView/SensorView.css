@@ -1,0 +1,10 @@
+
+.sensor p {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.sensor {
+  padding: 10px;
+  background-color: #E0E0E0;
+}
