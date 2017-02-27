@@ -101,4 +101,8 @@ export default class IceApi {
     getCode() {
         return this._get('/v1/views/entry/code');
     }
+    
+    getBlob(blob_id) {
+        return this._get(`/v1/blobs/${blob_id}`);
+    }
 }

@@ -1,8 +1,8 @@
 
 .md_insight {
-    margin: 10px; padding: 5px;
+    margin: 10px; padding: 2px;
     background-color: #F0F0F0;
-    min-height: 200px;
+    min-height: 100px;
 }
 
 .md_insight p {

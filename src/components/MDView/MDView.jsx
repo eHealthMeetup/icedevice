@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import IceApi from '../../backend/ice';
+import {executeCode} from '../../components/EngineerView/developer';
 import moment from 'moment';
 
 import { Button, Col, Grid, Row } from 'react-bootstrap';
@@ -18,7 +19,22 @@ export class LiveInsights extends Component {
         this.onRefresh = this.onRefresh.bind(this);
         this.state = {
             backend: new IceApi(),
-            insights: []
+            insights: [],
+            data: {
+                bpTimes: [],
+                bpTimestamps: [],
+                bpValues: [],
+
+                edaTimes: [],
+                edaTimestamps: [],
+                edaValues: [],
+                
+                dgTimestamps: [],
+                dgRespTimes: [],
+                dgRespCorrect: [],
+                
+                pulseTimestamps: []
+            }
         };
         this.onRefresh();
     }
@@ -26,16 +42,45 @@ export class LiveInsights extends Component {
     onRefresh() {
         this.state.backend.getCode().then((insights) => {
             this.setState({insights: insights});
-            
+            let updates = insights.map((insight) => {
+                insight.author = '';
+                insight.code = '';
+                return new Promise((resolve, reject) => {
+                    this.state.backend.getBlob(insight.code_blob)
+                        .then((extInsight) => {
+                            insight.author = extInsight.author + ' ';
+                            insight.code = extInsight.code;
+                            resolve(insight);
+                        })
+                        .catch(() => {
+                            resolve(insight);
+                        });
+                });
+            });
+            Promise.all(updates)
+                   .then((insights) => {
+                       this.setState({insights: insights});
+                       return insights;
+                   })
+                   .then((insights) => {
+                       insights.map((insight, iindex) => {
+                           executeCode(`.item-${iindex}`, insight.code, this.state.data, false);
+                       });
+                   });
         });
     }
     
     render() {
-        let itemRenders = this.state.insights.map((insight) => {
+        let itemRenders = this.state.insights.map((insight, iindex) => {
             return (
-                <Row className="show-grid">
-                  <Col md={12} className="md_insight">
-                    <p>Insight: <b>{insight.name}</b> ({moment(insight.updated).max().fromNow()})</p>
+                <Row className="show-grid md_insight" key={iindex}>
+                  <Col md={3}>
+                    <p>
+                      Insight: <b>{insight.name}</b>
+                      ({insight.author}updated {moment(insight.updated).fromNow()})
+                    </p>
+                  </Col>
+                  <Col md={6} mdOffset={6} className={'item-' + iindex}>
                   </Col>
                 </Row>
             );
@@ -53,7 +98,6 @@ export class LiveInsights extends Component {
                 </Row>
                 {itemRenders}
               </Grid>
-              
             </div>
         );
     }

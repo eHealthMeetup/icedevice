@@ -21,32 +21,10 @@ function underscorejs() {
 }
 
 /*
- * Inserts a div element in to the results. This is designed for direct manipulation 
- * of HTML content.
- * @insights_api
- */
-function getHtmlOutput() {
-    let results = document.querySelector('#results');
-    results.innerHTML = '<div class="output"></div>';
-    return document.querySelector('#results .output');
-}
-
-/*
- * Inserts a canvas element as required by the chart.js library which is used to draw
- * the nice graphics.
- * @insights_api
- */
-function getChart() {
-    let results = document.querySelector('#results');
-    results.innerHTML = '<canvas id="outputChart" width="400" height="300"></canvas>';
-    return document.querySelector('#results canvas');
-}
-
-/*
  * Helper function designed to provide a clean local scope against which the insights code 
  * can be evaluated.
  */
-function _executeCode(_the_code, data) {
+function _executeCode(selector, _the_code, data) {
     let bpTimes = data.bpTimes;
     let bpTimestamps = data.bpTimestamps;
     let bpValues = data.bpValues;
@@ -60,22 +38,49 @@ function _executeCode(_the_code, data) {
     let dgRespCorrect = data.dgRespCorrect;
 
     let pulseTimestamps = data.pressure;
+    
     let moment = momentjs();
     let _ = underscorejs();
+
+    /*
+     * Inserts a canvas element as required by the chart.js library which is used to draw
+     * the nice graphics.
+     * @insights_api
+     */
+    var getChart = function getChart() {
+        let results = document.querySelector(selector);
+        results.innerHTML = '<canvas id="outputChart" width="400" height="300"></canvas>';
+        return document.querySelector(`${selector} canvas`);
+    };
+    
+    /*
+     * Inserts a div element in to the results. This is designed for direct manipulation 
+     * of HTML content.
+     * @insights_api
+     */
+    var getHtmlOutput = function getHtmlOutput() {
+        let results = document.querySelector(selector);
+        results.innerHTML = '<div class="output"></div>';
+        return document.querySelector(`${selector} .output`);
+    };
+
+
     return eval(_the_code);
 }
 
 /*
  * Execute the insight code and show its output (or error message) to the user.
  */
-function executeCode(the_code, data, animation) {
+export const executeCode = function executeCode(selector, the_code, data, animation) {
     try {
-        let results = document.querySelector('#results');
+        let results = document.querySelector(`${selector}`);
         results.innerHTML = '<div class="returnValue"></div>';
 
         Chart.defaults.global.animation.duration = animation ? 500 : 0;
-        let status = {message:'No errors.', output: _executeCode(the_code, data)};
-        if (document.querySelectorAll('#results .returnValue').length == 1) {
+        let status = {
+            message:'No errors.',
+            output: _executeCode(selector, the_code, data)};
+        if (document.querySelectorAll(`${selector} .returnValue`).length == 1) {
             results.innerText = status.output === undefined ? '' : status.output;
         }
         return status;
@@ -152,7 +157,8 @@ export default class Developer extends Component {
 
     scheduleRefresh(animation) {
         let self = this;
-        let result = executeCode(this.state.codeVal, this.state.data, animation);
+        let result = executeCode(
+            '#results', this.state.codeVal, this.state.data, animation);
         clearTimeout(this.state.timer);
         this.setState({
             resultsLog: result.message,
