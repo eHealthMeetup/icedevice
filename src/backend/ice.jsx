@@ -97,4 +97,8 @@ export default class IceApi {
     getSensors() {
         return this._get('/v1/views/entry/sensors');
     }
+    
+    getCode() {
+        return this._get('/v1/views/entry/code');
+    }
 }

@@ -9,6 +9,16 @@ import 'brace/theme/github';
 import 'brace/theme/xcode';
 
 import IceApi from '../../backend/ice';
+import moment from 'moment';
+import underscore from 'underscore';
+
+function momentjs() {
+    return moment;
+}
+
+function underscorejs() {
+    return underscore;
+}
 
 /*
  * Inserts a div element in to the results. This is designed for direct manipulation 
@@ -45,12 +55,13 @@ function _executeCode(_the_code, data) {
     let edaTimestamps = data.edaTimestamps;
     let edaValues = data.edaValues;
 
-    ;
     let dgTimestamps = data.dgTimestamps;
     let dgRespTimes = data.dgRespTimes;
     let dgRespCorrect = data.dgRespCorrect;
 
     let pulseTimestamps = data.pressure;
+    let moment = momentjs();
+    let _ = underscorejs();
     return eval(_the_code);
 }
 

@@ -1,0 +1,12 @@
+
+.md_insight {
+    margin: 10px; padding: 5px;
+    background-color: #F0F0F0;
+    min-height: 200px;
+}
+
+.md_insight p {
+    text-align: left;
+    margin: 0px;
+    padding: 0px;
+}
