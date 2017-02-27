@@ -8,7 +8,7 @@ import './MDView.css';
 
 const MDView = (props)  => (
     <div>
-      <h2>This is MD View component</h2>
+      <h2>View your insights here:</h2>
       <LiveInsights />
     </div>
 );
@@ -93,7 +93,7 @@ export class LiveInsights extends Component {
               <Grid>
                 <Row className="show-grid">
                   <Col md={6} mdOffset={3} className="md_toolbar">
-                    <Button bsStyle="primary" bsSize="large" block onClick={this.onRefresh}>
+                    <Button bsStyle="default" bsSize="large" block onClick={this.onRefresh}>
                       Refresh
                     </Button>
                   </Col>
