@@ -87,7 +87,30 @@ export const executeCode = function executeCode(selector, the_code, data, animat
     } catch(e) {
         return {message: e.message, output: ''};
     }
-}
+};
+
+export const updateData = function updateData(comp) {
+    return comp.state.backend.getSensors().then((json) => {
+        let d = json[0].data;
+        comp.setState({
+            data: {
+                bpTimes: d.bp.times,
+                bpTimestamps: d.bp.timestamps,
+                bpValues: d.bp.values,
+
+                edaTimes: d.eda.times,
+                edaTimestamps: d.eda.timestamps,
+                edaValues: d.eda.values,
+                
+                dgTimestamps: d.duckgoose.timestamps,
+                dgRespTimes: d.duckgoose.response_times,
+                dgRespCorrect: d.duckgoose.response_correct,
+                
+                pulseTimestamps: d.pulse
+            }
+        });
+    });
+};
 
 export default class Developer extends Component {
     constructor(props) {
@@ -132,25 +155,7 @@ export default class Developer extends Component {
     }
 
     onRefresh() {
-        this.state.backend.getSensors().then((json) => {
-            let d = json[0].data;
-            this.setState({
-                data: {
-                    bpTimes: d.bp.times,
-                    bpTimestamps: d.bp.timestamps,
-                    bpValues: d.bp.values,
-
-                    edaTimes: d.eda.times,
-                    edaTimestamps: d.eda.timestamps,
-                    edaValues: d.eda.values,
-                    
-                    dgTimestamps: d.duckgoose.timestamps,
-                    dgRespTimes: d.duckgoose.response_times,
-                    dgRespCorrect: d.duckgoose.response_correct,
-                    
-                    pulseTimestamps: d.pulse
-                }
-            });
+        updateData(this).then(() => {
             this.scheduleRefresh(false);
         });
     }
@@ -265,15 +270,15 @@ export default class Developer extends Component {
                         readOnly={true}
                         editorProps={{$blockScrolling: true}}
                         value={
-                            '// Example 3 - Draw a line chart\n' +
+                            '// Example 3 - Draw a line chart for BP values\n' +
                                'let chart = new Chart(getChart(), {\n' +
                                '    type: "line", \n' +
                                '    data: {\n' +
                                '        datasets: [{\n' +
-                               '            label: "Pulse",\n' +
-                               '            data: [1, 3, 2]\n' +
+                               '            label: "Blood Pressure",\n' +
+                               '            data: bpValues\n' +
                                '        }],\n' +
-                               '        labels: ["Red", "Blue", "Green"]\n' +
+                               '        labels: bpTimes\n' +
                                '    }\n' +
                                '});\n'
                               }

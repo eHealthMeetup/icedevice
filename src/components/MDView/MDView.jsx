@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import IceApi from '../../backend/ice';
-import {executeCode} from '../../components/EngineerView/developer';
+import { executeCode, updateData } from '../../components/EngineerView/developer';
 import moment from 'moment';
 
 import { Button, Col, Grid, Row } from 'react-bootstrap';
@@ -57,16 +57,18 @@ export class LiveInsights extends Component {
                         });
                 });
             });
-            Promise.all(updates)
-                   .then((insights) => {
-                       this.setState({insights: insights});
-                       return insights;
-                   })
-                   .then((insights) => {
-                       insights.map((insight, iindex) => {
-                           executeCode(`.item-${iindex}`, insight.code, this.state.data, false);
+            updateData(this).then(() => {
+                Promise.all(updates)
+                       .then((insights) => {
+                           this.setState({insights: insights});
+                           return insights;
+                       })
+                       .then((insights) => {
+                           insights.map((insight, iindex) => {
+                               executeCode(`.item-${iindex}`, insight.code, this.state.data, false);
+                           });
                        });
-                   });
+            });
         });
     }
     
