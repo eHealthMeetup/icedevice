@@ -76,7 +76,21 @@ export default class IceApi {
             'subject': this._subject,
             'group': '', 'subgroup': '', 'repeat': '',
             'variable': variable,
-            'value': value.toString()
+            'value': `${value}`
         }]);
+    }
+
+    postCode(name, author, code) {
+        this._post('/v1/blobs', {
+            'name': name,
+            'author': author,
+            'code': code
+        }).then((response) => {
+            this._post('/v1/forms', [{
+                'name': name,
+                'device': 'web',
+                'blob': `${response.result.url.split('/').pop()}`
+            }]);
+        });
     }
 }

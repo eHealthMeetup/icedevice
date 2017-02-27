@@ -37,7 +37,7 @@ export class RandomSensor extends Component {
         }
         this.state = {
             backend: new IceApi(),
-            value: 50,
+            value: 90,
             timer: false,
             duck: chance < 88 ? 'goose' : 'duck',
             duckTimer: new Date().getTime(),

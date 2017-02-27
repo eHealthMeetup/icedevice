@@ -67,6 +67,7 @@ export default class Developer extends Component {
         super(props);
         this.onEdit = this.onEdit.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
+        this.onPublish = this.onPublish.bind(this);
         this.scheduleRefresh = this.scheduleRefresh.bind(this);
         this.state = {
             backend: new IceApi(),
@@ -134,6 +135,10 @@ export default class Developer extends Component {
         this.scheduleRefresh(true);
     }
 
+    onPublish() {
+        this.state.backend.postCode('test', 'Mihai', this.state.codeVal);
+    }
+
     render() {
         let panelStyle = this.state.resultsLog == 'No errors.' ? 'primary' : 'danger';
         
@@ -169,7 +174,11 @@ export default class Developer extends Component {
                     <Panel header={this.state.resultsLog} bsStyle={panelStyle}>
                       <div id="results">Your output here</div>
                     </Panel>
-                    <Button bsStyle="success" bsSize="large">Publish</Button>
+                    <Button
+                        bsStyle="success" bsSize="large"
+                        onClick={this.onPublish}>
+                      Publish
+                    </Button>
                   </Col>
                 </Row>
                 
