@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router';
 
+import Registration from './Registration';
+
 const HomeView = (props)  => (
         <div className="app-container">
             <h2 className="intro">Connecting <span className="text-white"><strong>Digital Health Devices</strong></span><br />
@@ -16,6 +18,7 @@ const HomeView = (props)  => (
                     <Link className="btn btn-default btn-round" to='/md'>I'M A HEALTHCARE PROFESSIONAL</Link>
                 </div>
             </div>
+            <Registration />
         </div>
 );
 

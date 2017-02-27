@@ -105,4 +105,38 @@ export default class IceApi {
     getBlob(blob_id) {
         return this._get(`/v1/blobs/${blob_id}`);
     }
+
+    postFeedback(record, name, email, phone, organization, attend, present, interest) {
+        this._post('/v1/values', [
+            {'subject': this._subject, 'group': '', 'subgroup': '', 'repeat': `${record}`,
+             'variable': 'name',
+             'value': `${name}`
+            },
+            {'subject': this._subject, 'group': '', 'subgroup': '', 'repeat': `${record}`,
+             'variable': 'email',
+             'value': `${email}`
+            },
+            {'subject': this._subject, 'group': '', 'subgroup': '', 'repeat': `${record}`,
+             'variable': 'phone',
+             'value': `${phone}`
+            },
+            {'subject': this._subject, 'group': '', 'subgroup': '', 'repeat': `${record}`,
+             'variable': 'organization',
+             'value': `${organization}`
+            },
+            {'subject': this._subject, 'group': '', 'subgroup': '', 'repeat': `${record}`,
+             'variable': 'attend',
+             'value': `${attend}`
+            },
+            {'subject': this._subject, 'group': '', 'subgroup': '', 'repeat': `${record}`,
+             'variable': 'present',
+             'value': `${present}`
+            },
+            {'subject': this._subject, 'group': '', 'subgroup': '', 'repeat': `${record}`,
+             'variable': 'interest',
+             'value': `${interest}`
+            }
+        ]);
+        
+    }
 }
