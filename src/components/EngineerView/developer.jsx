@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import brace from 'brace';
 import AceEditor from 'react-ace';
+import Registration from '../Registration/Registration';
 import Chart from 'chart.js';
 import { Button, ButtonToolbar, Col, Grid, Panel, Row } from 'react-bootstrap';
 
@@ -11,6 +13,8 @@ import 'brace/theme/xcode';
 import IceApi from '../../backend/ice';
 import moment from 'moment';
 import underscore from 'underscore';
+
+import './EngineerView.css';
 
 function momentjs() {
     return moment;
@@ -119,13 +123,17 @@ export default class Developer extends Component {
         this.onRefresh = this.onRefresh.bind(this);
         this.onPublish = this.onPublish.bind(this);
         this.scheduleRefresh = this.scheduleRefresh.bind(this);
+        this.onUserSubmit = this.onUserSubmit.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+
         this.state = {
+            isModalOpen: false,
             backend: new IceApi(),
             codeVal: '// Usable variables for each sensor\n' +
-                     '// BP: bpTimestamps, bpTimes, bpValues\n' +
-                     '// EDA: edaTimestamps, edaTimes, edaValues\n' +
-                     '// DG: dgTimestamps, dgRespCorrect, dgRespTimes\n' +
-                     '// PULSE: pulseTimestamps\n\n' +
+                     '// Blood Pressure (BP): bpTimestamps, bpTimes, bpValues\n' +
+                     '// Electrodermal Activity (EDA): edaTimestamps, edaTimes, edaValues\n' +
+                     '// Response Time (DG): dgTimestamps, dgRespCorrect, dgRespTimes\n' +
+                     '// Pulse: pulseTimestamps\n\n' +
                      '// Type your Javascript/ES6 code in here\n' +
                      '["Your", "output", "here!"].join(" ");\n',
             resultsLog: 'No errors.',
@@ -179,8 +187,28 @@ export default class Developer extends Component {
         this.scheduleRefresh(true);
     }
 
+    onUserSubmit(obj) {
+        this.setState({isModalOpen: false});
+        this.state.backend.postCode(obj.insight, obj.name, this.state.codeVal);
+        this.state.backend.postFeedback(
+            new Date().getTime(),
+            obj.name,
+            obj.email,
+            obj.phone,
+            obj.organization,
+            obj.attend,
+            obj.present,
+            obj.interest,
+            obj.insight
+        );
+    }
+
     onPublish() {
-        this.state.backend.postCode('test', 'Mihai', this.state.codeVal);
+        this.setState({isModalOpen: true});
+    }
+
+    closeModal(){
+        this.setState({ isModalOpen: false });
     }
 
     render() {
@@ -188,15 +216,12 @@ export default class Developer extends Component {
         
         return (
             <div className="developer">
+              <Registration onUserClose={this.closeModal} onUserSubmit={this.onUserSubmit} isModalOpen={this.state.isModalOpen}/>
               <Grid>
                 <Row className="show-grid">
-                  <Col sm={12} md={12}>
-                    <h2>Welcome to eHealth visualization builder.</h2>
-                  </Col>
-                </Row>
-                
-                <Row className="show-grid">
                   <Col sm={6} md={6}>
+                      <h4>Code data visualizations:</h4>
+                  <Panel>
                     <AceEditor
                         mode="javascript"
                         theme="github"
@@ -213,26 +238,33 @@ export default class Developer extends Component {
                                 showGutter: true
                             }}
                     />
+                    <div className="publish-btn-container">
+                        <Button
+                          bsStyle="success" bsSize="small"
+                          onClick={this.onPublish}>
+                          Publish
+                        </Button>
+                    </div>
+                  </Panel>
                   </Col>
                   <Col sm={6} md={6}>
+                      <h4>View live results:</h4>
                     <Panel header={this.state.resultsLog} bsStyle={panelStyle}>
                       <div id="results">Your output here</div>
                     </Panel>
-                    <Button
-                        bsStyle="success" bsSize="large"
-                        onClick={this.onPublish}>
-                      Publish
-                    </Button>
+
                   </Col>
                 </Row>
                 
                 <Row className="show-grid">
                   <Col sm={12} md={12}>
-                    <h3>Check out these samples</h3>
+
                   </Col>
                 </Row>
                 <Row className="show-grid">
                   <Col sm={6} md={6}>
+                      <h4>Examples:</h4>
+                    <Panel>
                     <AceEditor
                         mode="javascript"
                         theme="xcode"
@@ -260,8 +292,10 @@ export default class Developer extends Component {
                         width="100%"
                         setOptions={{showGutter: false}}
                     />
+                    </Panel>
                   </Col>
                   <Col sm={6} md={6}>
+                    <Panel>
                     <AceEditor
                         mode="javascript"
                         theme="xcode"
@@ -286,6 +320,7 @@ export default class Developer extends Component {
                         width="100%"
                         setOptions={{showGutter: false}}
                     />
+                    </Panel>
                   </Col>
                 </Row>
               </Grid>
