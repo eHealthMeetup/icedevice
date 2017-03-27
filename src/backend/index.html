@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Socket.io</title>
+</head>
+<body>
+<h1>Express and socket.io</h1>
+<div id="news-list"></div>
+<script src="static/socket.io-client/dist/socket.io.js"></script>
+<script>
+    var socket = io('http://localhost:5000');
+    var div = document.getElementById("news-list");
+    socket.on('message', function (data) {
+
+        console.log("Rendering news : ",data);
+        div.innerHTML = data;
+
+
+        socket.emit('dataReceived', { data: 'received data' });
+    });
+</script>
+</body>
+</html>

@@ -270,7 +270,7 @@ export default class Developer extends Component {
                         theme="xcode"
                         name="sample1"
                         highlightActiveLine={false}
-                        readOnly={true}
+                        readOnly={false}
                         editorProps={{$blockScrolling: true}}
                         value={
                             '// Example 1 - Draw a barchart\n' +
