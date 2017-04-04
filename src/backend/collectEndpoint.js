@@ -43,7 +43,7 @@ sp.on('data', function (sensorData) {
     // post the data to encapsia
     request({
         headers: {
-            'Authorization': 'Bearer 42c3912000b849f1ab4028101653072d',
+            'Authorization': 'Bearer c1b52604de9f46aa99f16aca2222de1a',
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
